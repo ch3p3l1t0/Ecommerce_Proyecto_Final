@@ -5,28 +5,28 @@ const authAdmin = require('../middleware/authAdmin')
 const fs = require('fs')
 
 
-// we will upload image on cloudinary
+// subiremos la imagen a cloudinary
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUD_API_KEY,
     api_secret: process.env.CLOUD_API_SECRET
 })
 
-// Upload image only admin can use
+// Subir imagen solo la puede usar el administrador
 router.post('/upload',auth , authAdmin, (req, res) =>{
     try {
         if(!req.files || Object.keys(req.files).length === 0)
-            return res.status(400).json({msg: 'No files were uploaded.'})
+            return res.status(400).json({msg: 'No se cargaron archivos'})
         
         const file = req.files.file;
         if(file.size > 1024*1024) {
             removeTmp(file.tempFilePath)
-            return res.status(400).json({msg: "Size too large"})
+            return res.status(400).json({msg: "Archivo demasiado grande"})
         }
 
         if(file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/png'){
             removeTmp(file.tempFilePath)
-            return res.status(400).json({msg: "File format is incorrect."})
+            return res.status(400).json({msg: "El formato del archivo es incorrecto."})
         }
 
         cloudinary.v2.uploader.upload(file.tempFilePath, {folder: "test"}, async(err, result)=>{
@@ -43,16 +43,16 @@ router.post('/upload',auth , authAdmin, (req, res) =>{
     }
 })
 
-// Delete image only admin can use
+// Eliminar imagen que solo el administrador puede usar
 router.post('/destroy',auth , authAdmin, (req, res) =>{
     try {
         const {public_id} = req.body;
-        if(!public_id) return res.status(400).json({msg: 'No images Selected'})
+        if(!public_id) return res.status(400).json({msg: 'No hay imágenes seleccionadas'})
 
         cloudinary.v2.uploader.destroy(public_id, async(err, result) =>{
             if(err) throw err;
 
-            res.json({msg: "Deleted Image"})
+            res.json({msg: "Imagen eliminada"})
         })
 
     } catch (err) {

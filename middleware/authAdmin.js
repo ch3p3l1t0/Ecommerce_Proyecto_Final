@@ -2,12 +2,12 @@ const Users = require('../models/userModel')
 
 const authAdmin = async (req, res, next) =>{
     try {
-        // Get user information by id
+// Obtener información del usuario por id
         const user = await Users.findOne({
             _id: req.user.id
         })
         if(user.role === 0)
-            return res.status(400).json({msg: "Admin resources access denied"})
+            return res.status(400).json({msg: "Acceso denegado a recursos de administración"})
 
         next()
         
