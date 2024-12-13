@@ -33,13 +33,13 @@ function OrderHistory() {
         <div className="history-page">
             <h2>History</h2>
 
-            <h4>You have {history.length} ordered</h4>
+            <h4>Tienes {history.length} ordenado</h4>
 
             <table>
                 <thead>
                     <tr>
-                        <th>Payment ID</th>
-                        <th>Date of Purchased</th>
+                        <th>ID de pago</th>
+                        <th>Fecha de compra</th>
                         <th></th>
                     </tr>
                 </thead>

@@ -8,8 +8,6 @@ const initialState = {
     product_id: '',
     title: '',
     price: 0,
-    description: 'How to and tutorial videos of cool CSS effect, Web Design ideas,JavaScript libraries, Node.',
-    content: 'Welcome to our channel Dev AT. Here you can learn web designing, UI/UX designing, html css tutorials, css animations and css effects, javascript and jquery tutorials and related so on.',
     category: '',
     _id: ''
 }
@@ -51,16 +49,16 @@ function CreateProduct() {
     const handleUpload = async e =>{
         e.preventDefault()
         try {
-            if(!isAdmin) return alert("You're not an admin")
+            if(!isAdmin) return alert("No eres un administrador")
             const file = e.target.files[0]
             
-            if(!file) return alert("File not exist.")
+            if(!file) return alert("El archivo no existe.")
 
             if(file.size > 1024 * 1024) // 1mb
-                return alert("Size too large!")
+                return alert("¡Archivo demasiado grande!")
 
             if(file.type !== 'image/jpeg' && file.type !== 'image/png') // 1mb
-                return alert("File format is incorrect.")
+                return alert("El formato del archivo es incorrecto.")
 
             let formData = new FormData()
             formData.append('file', file)
@@ -79,7 +77,7 @@ function CreateProduct() {
 
     const handleDestroy = async () => {
         try {
-            if(!isAdmin) return alert("You're not an admin")
+            if(!isAdmin) return alert("No eres un administrador")
             setLoading(true)
             await axios.post('/api/destroy', {public_id: images.public_id}, {
                 headers: {Authorization: token}
@@ -99,8 +97,8 @@ function CreateProduct() {
     const handleSubmit = async e =>{
         e.preventDefault()
         try {
-            if(!isAdmin) return alert("You're not an admin")
-            if(!images) return alert("No Image Upload")
+            if(!isAdmin) return alert("No eres un administrador")
+            if(!images) return alert("No se puede cargar imagen")
 
             if(onEdit){
                 await axios.put(`/api/products/${product._id}`, {...product, images}, {

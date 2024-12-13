@@ -37,11 +37,11 @@ function Filters() {
             <div className="row sort">
                 <span>Sort By: </span>
                 <select value={sort} onChange={e => setSort(e.target.value)} >
-                    <option value=''>Newest</option>
-                    <option value='sort=oldest'>Oldest</option>
+                    <option value=''>El más nuevo</option>
+                    <option value='sort=oldest'>Más antiguo</option>
                     <option value='sort=-sold'>Best sales</option>
-                    <option value='sort=-price'>Price: Hight-Low</option>
-                    <option value='sort=price'>Price: Low-Hight</option>
+                    <option value='sort=-price'>Precio: Alto-Bajo</option>
+                    <option value='sort=price'>Precio: Bajo-Alto</option>
                 </select>
             </div>
         </div>
