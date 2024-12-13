@@ -1,6 +1,6 @@
 const Products = require('../models/productModel')
 
-// Filter, sorting and paginating
+// Filtrar, ordenar y paginar
 
 class APIfeatures {
     constructor(query, queryString){
@@ -8,18 +8,18 @@ class APIfeatures {
         this.queryString = queryString;
     }
     filtering(){
-       const queryObj = {...this.queryString} //queryString = req.query
+       const queryObj = {...this.queryString} //Cadena de consulta = req.query
 
-       const excludedFields = ['page', 'sort', 'limit']
+       const excludedFields = ['página', 'clasificar', 'límite']
        excludedFields.forEach(el => delete(queryObj[el]))
        
        let queryStr = JSON.stringify(queryObj)
        queryStr = queryStr.replace(/\b(gte|gt|lt|lte|regex)\b/g, match => '$' + match)
 
-    //    gte = greater than or equal
-    //    lte = lesser than or equal
-    //    lt = lesser than
-    //    gt = greater than
+    // gte = mayor o igual que
+    // lte = menor o igual que
+    // lt = menor que
+    // gt = mayor que
        this.query.find(JSON.parse(queryStr))
          
        return this;
@@ -66,18 +66,18 @@ const productCtrl = {
     createProduct: async(req, res) =>{
         try {
             const {product_id, title, price, description, content, images, category} = req.body;
-            if(!images) return res.status(400).json({msg: "No image upload"})
+            if(!images) return res.status(400).json({msg: "No se puede cargar imagen"})
 
             const product = await Products.findOne({product_id})
             if(product)
-                return res.status(400).json({msg: "This product already exists."})
+                return res.status(400).json({msg: "Este producto ya existe."})
 
             const newProduct = new Products({
                 product_id, title: title.toLowerCase(), price, description, content, images, category
             })
 
             await newProduct.save()
-            res.json({msg: "Created a product"})
+            res.json({msg: "Creó un producto"})
 
         } catch (err) {
             return res.status(500).json({msg: err.message})
@@ -86,7 +86,7 @@ const productCtrl = {
     deleteProduct: async(req, res) =>{
         try {
             await Products.findByIdAndDelete(req.params.id)
-            res.json({msg: "Deleted a Product"})
+            res.json({msg: "Se eliminó un producto"})
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
@@ -94,13 +94,13 @@ const productCtrl = {
     updateProduct: async(req, res) =>{
         try {
             const {title, price, description, content, images, category} = req.body;
-            if(!images) return res.status(400).json({msg: "No image upload"})
+            if(!images) return res.status(400).json({msg: "No se pudo cargar imagen"})
 
             await Products.findOneAndUpdate({_id: req.params.id}, {
                 title: title.toLowerCase(), price, description, content, images, category
             })
 
-            res.json({msg: "Updated a Product"})
+            res.json({msg: "Se actualizó un producto"})
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }

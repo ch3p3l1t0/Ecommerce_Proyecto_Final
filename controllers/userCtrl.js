@@ -9,10 +9,10 @@ const userCtrl = {
             const {name, email, password} = req.body;
 
             const user = await Users.findOne({email})
-            if(user) return res.status(400).json({msg: "The email already exists."})
+            if(user) return res.status(400).json({msg: "El correo electrónico ya existe."})
 
             if(password.length < 6) 
-                return res.status(400).json({msg: "Password is at least 6 characters long."})
+                return res.status(400).json({msg: "La contraseña tiene al menos 6 caracteres."})
 
             // Password Encryption
             const passwordHash = await bcrypt.hash(password, 10)
@@ -44,12 +44,12 @@ const userCtrl = {
             const {email, password} = req.body;
 
             const user = await Users.findOne({email})
-            if(!user) return res.status(400).json({msg: "User does not exist."})
+            if(!user) return res.status(400).json({msg: "El usuario no existe."})
 
             const isMatch = await bcrypt.compare(password, user.password)
-            if(!isMatch) return res.status(400).json({msg: "Incorrect password."})
+            if(!isMatch) return res.status(400).json({msg: "Contraseña incorrecta."})
 
-            // If login success , create access token and refresh token
+// Si el inicio de sesión es exitoso, crear un token de acceso y actualizar el token
             const accesstoken = createAccessToken({id: user._id})
             const refreshtoken = createRefreshToken({id: user._id})
 
@@ -76,10 +76,10 @@ const userCtrl = {
     refreshToken: (req, res) =>{
         try {
             const rf_token = req.cookies.refreshtoken;
-            if(!rf_token) return res.status(400).json({msg: "Please Login or Register"})
+            if(!rf_token) return res.status(400).json({msg: "Por favor, inicie sesión o regístrese"})
 
             jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) =>{
-                if(err) return res.status(400).json({msg: "Please Login or Register"})
+                if(err) return res.status(400).json({msg: "Por favor, inicie sesión o regístrese"})
 
                 const accesstoken = createAccessToken({id: user.id})
 
@@ -94,7 +94,7 @@ const userCtrl = {
     getUser: async (req, res) =>{
         try {
             const user = await Users.findById(req.user.id).select('-password')
-            if(!user) return res.status(400).json({msg: "User does not exist."})
+            if(!user) return res.status(400).json({msg: "El usuario no existe."})
 
             res.json(user)
         } catch (err) {
@@ -104,13 +104,13 @@ const userCtrl = {
     addCart: async (req, res) =>{
         try {
             const user = await Users.findById(req.user.id)
-            if(!user) return res.status(400).json({msg: "User does not exist."})
+            if(!user) return res.status(400).json({msg: "El usuario no existe."})
 
             await Users.findOneAndUpdate({_id: req.user.id}, {
                 cart: req.body.cart
             })
 
-            return res.json({msg: "Added to cart"})
+            return res.json({msg: "Añadido al carrito."})
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
